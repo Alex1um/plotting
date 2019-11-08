@@ -8,6 +8,9 @@ import numpy as np
 
 
 class Regression(Reg.Ui_MainWindow):
+    """
+    Клас регрессиии
+    """
     templates = {
         (lambda x, k, b, *args: k * x + b,
          lambda *args: '{}*x + {}'.format(*args)),
@@ -18,6 +21,7 @@ class Regression(Reg.Ui_MainWindow):
     }
 
     def __init__(self, widget):
+        """Инициализация"""
         self.widget = widget
         self.setupUi(self.widget)
         self.data = []
@@ -31,6 +35,7 @@ class Regression(Reg.Ui_MainWindow):
         self.bt_eq_reset.pressed.connect(
             lambda: self.prev_eqs.clear())
 
+        """Инициализация меню"""
         self.menu_help.triggered.connect(lambda: self.show_help())
         self.menu_file_save.triggered.connect(lambda: self.save_table())
         self.menu_file_new.triggered.connect(lambda: self.reset())
@@ -44,6 +49,7 @@ class Regression(Reg.Ui_MainWindow):
         self.menu_file_open.triggered.connect(lambda: self.load_table())
 
     def show_help(self):
+        """Вывод помощи"""
         mbox = QtWidgets.QMessageBox()
         mbox.setText('> Откройте таблицу.\n'
                      '> Выделите 2 стлбца одинакового размера\n'
@@ -54,6 +60,7 @@ class Regression(Reg.Ui_MainWindow):
         mbox.exec()
 
     def save_table(self):
+        """Сохранение выделенного"""
         name = QtWidgets.QFileDialog().getSaveFileName(self.widget,
                                                        'Save Selected',
                                                        'unnamed.csv',
@@ -77,6 +84,7 @@ class Regression(Reg.Ui_MainWindow):
             data.to_excel(name)
 
     def load_table(self):
+        """Загрузка таблицы"""
         name, _ = QtWidgets.QFileDialog().getOpenFileName(self.widget,
                                                           'Load table',
                                                           '',
@@ -111,6 +119,7 @@ class Regression(Reg.Ui_MainWindow):
                     QtWidgets.QTableWidgetItem(str(row[j])))
 
     def group_selected(self):
+        """Группировка выделенного"""
         selected = dict()
         for item in self.main_table.selectedItems():
             coll = item.column()
@@ -121,6 +130,7 @@ class Regression(Reg.Ui_MainWindow):
         return selected
 
     def update_reg(self):
+        """Обработка выделенных данных"""
         # item: QtWidgets.QTableWidgetItem = None
 
         selected = list(self.group_selected().items())
@@ -141,12 +151,14 @@ class Regression(Reg.Ui_MainWindow):
                 self.widget.show_exeption('Values must be float or integer')
 
     def reset(self):
+        """Сброс"""
         self.selected = []
         self.data = []
         self.main_table.clear()
         self.prev_eqs.clear()
 
     def built_plot(self):
+        """Прорисовка графов"""
         self.widget.plot_widget.plot_clear()
         # self.widget.plot_widget.plot_clear()
         for item in self.selected:
@@ -160,8 +172,17 @@ class Regression(Reg.Ui_MainWindow):
             ax.legend(loc='upper left')
 
     def find_equation(self):
-
+        """
+        Нахождение уравнения по точкам
+        :return:
+        """
         def error(args, template: FunctionType):
+            """
+
+            :param args: Переменные
+            :param template: Шаблон уравнения
+            :return: Ошибка
+            """
             er = 0
             for elem in self.selected:
                 er += (template(elem[0], *args) - elem[1]) ** 2
