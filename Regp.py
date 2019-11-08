@@ -31,6 +31,7 @@ class Regression(Reg.Ui_MainWindow):
         self.bt_eq_reset.pressed.connect(
             lambda: self.prev_eqs.clear())
 
+        self.menu_file_save.triggered.connect(lambda: self.save_table())
         self.menu_file_new.triggered.connect(lambda: self.reset())
         self.menu_plot_sett.triggered.connect(lambda: self.find_equation())
         self.menu_plot_build.triggered.connect(
@@ -40,6 +41,23 @@ class Regression(Reg.Ui_MainWindow):
             lambda: (
                 self.built_plot(), self.widget.plot_widget.plot_save()))
         self.menu_file_open.triggered.connect(lambda: self.load_table())
+
+    def save_table(self):
+        name = QtWidgets.QFileDialog().getSaveFileName(self.widget, 'Save Selected', 'unnamed.csv', 'Table (*.csv *.db *.xls *.xlsx)')[0]
+        data = dict()
+        selected = self.group_selected()
+        labels = tuple(self.data.keys())
+        for i, k in selected.items():
+            data[labels[i]] = k
+        data = pandas.DataFrame.from_dict(data)
+        ext = name[name.rfind('.') + 1::]
+        if ext == 'csv':
+            data.to_csv(name)
+        elif ext == 'db':
+            db_connection = sqlite3.connect(name)
+            data.to_sql(name, db_connection)
+        elif ext in {'xls', 'xlsx'}:
+            data.to_excel(name)
 
     def load_table(self):
         name, _ = QtWidgets.QFileDialog().getOpenFileName(self.widget,
@@ -75,8 +93,7 @@ class Regression(Reg.Ui_MainWindow):
                     j,
                     QtWidgets.QTableWidgetItem(str(row[j])))
 
-    def update_reg(self):
-        # item: QtWidgets.QTableWidgetItem = None
+    def group_selected(self):
         selected = dict()
         for item in self.main_table.selectedItems():
             coll = item.column()
@@ -84,7 +101,12 @@ class Regression(Reg.Ui_MainWindow):
                 selected[coll].append(item.text())
             else:
                 selected[coll] = [item.text()]
-        selected = list(selected.items())
+        return selected
+
+    def update_reg(self):
+        # item: QtWidgets.QTableWidgetItem = None
+
+        selected = list(self.group_selected().items())
 
         if selected:
             newselected = max(selected, key=lambda x: len(x[1]))
