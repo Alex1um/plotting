@@ -43,7 +43,13 @@ class Regression(Reg.Ui_MainWindow):
         self.menu_file_open.triggered.connect(lambda: self.load_table())
 
     def save_table(self):
-        name = QtWidgets.QFileDialog().getSaveFileName(self.widget, 'Save Selected', 'unnamed.csv', 'Table (*.csv *.db *.xls *.xlsx)')[0]
+        name = QtWidgets.QFileDialog().getSaveFileName(self.widget,
+                                                       'Save Selected',
+                                                       'unnamed.csv',
+                                                       'Table (*.csv'
+                                                       ' *.db'
+                                                       ' *.xls '
+                                                       '*.xlsx)')[0]
         data = dict()
         selected = self.group_selected()
         labels = tuple(self.data.keys())
