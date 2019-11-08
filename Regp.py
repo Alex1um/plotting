@@ -25,7 +25,11 @@ class Regression(Reg.Ui_MainWindow):
         self.bt_clear_selection.pressed.connect(
             lambda: self.main_table.clearSelection())
         self.main_table.itemSelectionChanged.connect(lambda: self.update_reg())
-        self.bt_run.pressed.connect(lambda: self.find_equation())
+        self.bt_eq_run.pressed.connect(lambda: self.find_equation())
+        self.bt_all_selection.pressed.connect(
+            lambda: self.main_table.selectAll())
+        self.bt_eq_reset.pressed.connect(
+            lambda: self.prev_eqs.clear())
 
         self.menu_file_new.triggered.connect(lambda: self.reset())
         self.menu_plot_sett.triggered.connect(lambda: self.find_equation())
