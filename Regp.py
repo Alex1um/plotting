@@ -31,6 +31,7 @@ class Regression(Reg.Ui_MainWindow):
         self.bt_eq_reset.pressed.connect(
             lambda: self.prev_eqs.clear())
 
+        self.menu_help.triggered.connect(lambda: self.show_help())
         self.menu_file_save.triggered.connect(lambda: self.save_table())
         self.menu_file_new.triggered.connect(lambda: self.reset())
         self.menu_plot_sett.triggered.connect(lambda: self.find_equation())
@@ -41,6 +42,16 @@ class Regression(Reg.Ui_MainWindow):
             lambda: (
                 self.built_plot(), self.widget.plot_widget.plot_save()))
         self.menu_file_open.triggered.connect(lambda: self.load_table())
+
+    def show_help(self):
+        mbox = QtWidgets.QMessageBox()
+        mbox.setText('> Откройте таблицу.\n'
+                     '> Выделите 2 стлбца одинакового размера\n'
+                     '> Нажмите "вычислить" для вычисления уравнений\n'
+                     '> Постройте график')
+        mbox.setWindowTitle('Как пользоваться')
+        mbox.show()
+        mbox.exec()
 
     def save_table(self):
         name = QtWidgets.QFileDialog().getSaveFileName(self.widget,

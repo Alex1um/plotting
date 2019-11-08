@@ -28,6 +28,7 @@ class Equation(Eq.Ui_MainWindow):
         self.Eq_edit.setSelection(0, 12)
 
         """Инициализация меню"""
+        self.menu_help.triggered.connect(lambda: self.show_help())
         self.menu_file_new.triggered.connect(lambda: self.reset())
         self.menu_file_open.triggered.connect(lambda: self.load_eqs())
         self.menu_file_save.triggered.connect(lambda: self.save_eqs())
@@ -61,6 +62,15 @@ class Equation(Eq.Ui_MainWindow):
                 pickle.dump(self.eqs, f)
         except Exception as exp:
             self.widget.show_exeption(exp)
+
+    def show_help(self):
+        mbox = QtWidgets.QMessageBox()
+        mbox.setText('> Наберите Уравнение\n'
+                     '> Нажмите добавить\n'
+                     '> Постройте график\n')
+        mbox.setWindowTitle('Как пользоваться')
+        mbox.show()
+        mbox.exec()
 
     def load_eqs(self):
         """Загрузка из файла"""
