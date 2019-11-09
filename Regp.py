@@ -123,10 +123,9 @@ class Regression(Reg.Ui_MainWindow):
             self.data = pandas.read_json(name)
         elif ext in {'xls', 'xlsx'}:
             self.data = pandas.read_excel(name)
-        elif ext == '.db':
+        elif ext == 'db':
             db_connection = sqlite3.connect(name)
-            self.data = pandas.read_sql(name, db_connection)
-
+            self.data = pandas.read_sql_query(name, db_connection)
         # self.main_table.setSelectionMode(
         #     QtWidgets.QAbstractItemView.MultiSelection)
         col_len = self.data.keys().__len__()
