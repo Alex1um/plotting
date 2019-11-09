@@ -26,6 +26,7 @@ class Equation(Eq.Ui_MainWindow):
         self.Edelete.pressed.connect(lambda: self.delete_item())
         self.Eqlist.setCurrentRow(0)
         self.Eq_edit.setSelection(0, 12)
+        self.widget.resizeEvent = self.resize
 
         """Инициализация меню"""
         self.menu_help.triggered.connect(lambda: self.show_help())
@@ -39,6 +40,17 @@ class Equation(Eq.Ui_MainWindow):
             lambda: (
                 self.build_plot(), self.widget.plot_widget.show()))
         self.menu_plot_sett.triggered.connect(lambda: self.update_settings())
+
+    def resize(self, *args, **kwargs):
+        self.Eqlist.resize(self.widget.width() * 0.75,
+                           self.widget.height() - 164)
+        self.Eqroots.setGeometry(self.widget.width() * 0.75,
+                                 170,
+                                 self.widget.width() * 0.25,
+                                 self.widget.height() - 164)
+        self.Eq_edit.resize(self.widget.width(), self.Eq_edit.height())
+        self.lb_roots.move(self.widget.width() * 0.875 - 100,
+                           self.lb_roots.y())
 
     def reset(self):
         """Отчистка полей"""

@@ -34,6 +34,7 @@ class Regression(Reg.Ui_MainWindow):
             lambda: self.main_table.selectAll())
         self.bt_eq_reset.pressed.connect(
             lambda: self.prev_eqs.clear())
+        self.widget.resizeEvent = self.resize
 
         """Инициализация меню"""
         self.menu_help.triggered.connect(lambda: self.show_help())
@@ -47,6 +48,28 @@ class Regression(Reg.Ui_MainWindow):
             lambda: (
                 self.built_plot(), self.widget.plot_widget.plot_save()))
         self.menu_file_open.triggered.connect(lambda: self.load_table())
+
+    def resize(self, *args, **kwargs):
+        self.main_table.resize(self.widget.width() * 0.7,
+                               self.widget.height() - 111)
+        self.prev_eqs.setGeometry(self.widget.width() * 0.7,
+                                  60,
+                                  self.widget.width() * 0.3,
+                                  self.widget.height() - 111)
+        self.bt_clear_selection.resize(self.widget.width() * 0.35,
+                                       self.bt_clear_selection.height())
+        self.bt_all_selection.setGeometry(self.widget.width() * 0.35,
+                                          self.bt_all_selection.y(),
+                                          self.widget.width() * 0.35,
+                                          self.bt_all_selection.height())
+        self.bt_eq_reset.setGeometry(self.widget.width() * 0.695,
+                                     self.bt_eq_reset.y(),
+                                     self.widget.width() * 0.127,
+                                     self.bt_eq_reset.height())
+        self.bt_eq_run.setGeometry(self.widget.width() * 0.82,
+                                   self.bt_eq_run.y(),
+                                   self.widget.width() * 0.187,
+                                   self.bt_eq_run.height())
 
     def show_help(self):
         """Вывод помощи"""

@@ -13,6 +13,7 @@ class Plotting(QtWidgets.QMainWindow):
         super().__init__()
         self.plot_widget = PlotWidget()
         # self.change_interface('Equations')
+        print(self.width() * 0.7)
         self.current_ui = Eqp.Equation(self)
         self.current_ui.menu_type_reg.triggered.connect(
             lambda: self.change_interface('Regression'))
