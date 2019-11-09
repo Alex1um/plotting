@@ -50,6 +50,7 @@ class Regression(Reg.Ui_MainWindow):
         self.menu_file_open.triggered.connect(lambda: self.load_table())
 
     def resize(self, *args, **kwargs):
+        """для масштабирования"""
         self.main_table.resize(self.widget.width() * 0.7,
                                self.widget.height() - 111)
         self.prev_eqs.setGeometry(self.widget.width() * 0.7,

@@ -42,6 +42,7 @@ class Equation(Eq.Ui_MainWindow):
         self.menu_plot_sett.triggered.connect(lambda: self.update_settings())
 
     def resize(self, *args, **kwargs):
+        """Для масштабирования"""
         self.Eqlist.resize(self.widget.width() * 0.75,
                            self.widget.height() - 164)
         self.Eqroots.setGeometry(self.widget.width() * 0.75,
@@ -77,6 +78,7 @@ class Equation(Eq.Ui_MainWindow):
             self.widget.show_exeption(exp)
 
     def show_help(self):
+        """Вывод помощи"""
         mbox = QtWidgets.QMessageBox()
         mbox.setText('> Наберите Уравнение\n'
                      '> Нажмите добавить\n'
