@@ -73,7 +73,7 @@ class PlotWidget(QtWidgets.QWidget):
 
 class FigureCanvas(FigureCanvasQTAgg):
     """Виджет графика"""
-    def __init__(self, parent=None, width=6, height=6, dpi=100):
+    def __init__(self, parent=None, width=7, height=7, dpi=100):
         self.fig = figure.Figure(figsize=(width, height), dpi=dpi)
         self.axes = self.fig.add_subplot(111)
         super().__init__(self.fig)
