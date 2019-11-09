@@ -18,7 +18,8 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.main_table = QtWidgets.QTableWidget(self.centralwidget)
         self.main_table.setGeometry(QtCore.QRect(0, 60, 563, 501))
-        self.main_table.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.main_table.setSelectionMode(
+            QtWidgets.QAbstractItemView.MultiSelection)
         self.main_table.setObjectName("main_table")
         self.main_table.setColumnCount(0)
         self.main_table.setRowCount(0)
@@ -104,7 +105,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.bt_clear_selection.setText(_translate("MainWindow", "Отчистить выделение"))
+        self.bt_clear_selection.setText(_translate("MainWindow",
+                                                   "Отчистить выделение"))
         self.bt_eq_run.setText(_translate("MainWindow", "Вычислить"))
         self.bt_eq_reset.setText(_translate("MainWindow", "Отчистить"))
         self.bt_all_selection.setText(_translate("MainWindow", "Выделить всё"))
@@ -117,7 +119,8 @@ class Ui_MainWindow(object):
         self.menu_file_save.setText(_translate("MainWindow", "Сохранить"))
         self.menu_type_eq.setText(_translate("MainWindow", "Уравнение"))
         self.menu_type_bydots.setText(_translate("MainWindow", "По точкам"))
-        self.menu_type_reg.setText(_translate("MainWindow", "Вычислить Уравнение"))
+        self.menu_type_reg.setText(_translate("MainWindow",
+                                              "Вычислить Уравнение"))
         self.menu_plot_build.setText(_translate("MainWindow", "Построить"))
         self.menu_plot_save.setText(_translate("MainWindow", "Сохранить"))
         self.menu_plot_sett.setText(_translate("MainWindow", "Настройки"))

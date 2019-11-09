@@ -124,8 +124,9 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.Eadd.setText(_translate("MainWindow", "Добавить"))
         self.Edelete.setText(_translate("MainWindow", "Удалить"))
-        self.lb_roots.setText(_translate("MainWindow", " Приблизительные\n"
-"точки пересечения"))
+        self.lb_roots.setText(_translate("MainWindow",
+                                         " Приблизительные\n "
+                                         "точки пересечения"))
         self.lb_list.setText(_translate("MainWindow", "Текущие уравнения"))
         self.lb_edit.setText(_translate("MainWindow", "Уравнение"))
         self.menu.setTitle(_translate("MainWindow", "Файл"))
@@ -137,7 +138,8 @@ class Ui_MainWindow(object):
         self.menu_file_save.setText(_translate("MainWindow", "Сохранить"))
         self.menu_type_eq.setText(_translate("MainWindow", "Уравнение"))
         self.menu_type_bydots.setText(_translate("MainWindow", "По точкам"))
-        self.menu_type_reg.setText(_translate("MainWindow", "Вычислить уравнение"))
+        self.menu_type_reg.setText(_translate("MainWindow",
+                                              "Вычислить уравнение"))
         self.menu_plot_build.setText(_translate("MainWindow", "Построить"))
         self.menu_plot_save.setText(_translate("MainWindow", "Сохранить"))
         self.menu_plot_sett.setText(_translate("MainWindow", "Настройки"))
