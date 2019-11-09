@@ -172,8 +172,7 @@ class Equation(Eq.Ui_MainWindow):
             func = eval('lambda x: ((' + ') - ('.join(self.eqs) + '))')
             a = fsolve(np.vectorize(func),
                        np.arange(*self.settings),
-                       xtol=1e-8,
-                       maxfev=1000)
+                       xtol=1e-5)
             for root in set(map(lambda x: x.round(2), a)):
                 self.Eqroots.addItem(QtWidgets.QListWidgetItem(str(root)))
 
