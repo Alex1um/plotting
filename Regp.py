@@ -91,20 +91,21 @@ class Regression(Reg.Ui_MainWindow):
                                                        ' *.db'
                                                        ' *.xls '
                                                        '*.xlsx)')[0]
-        data = dict()
-        selected = self.group_selected()
-        labels = tuple(self.data.keys())
-        for i, k in selected.items():
-            data[labels[i]] = k
-        data = pandas.DataFrame.from_dict(data)
-        ext = name[name.rfind('.') + 1::]
-        if ext == 'csv':
-            data.to_csv(name)
-        elif ext == 'db':
-            db_connection = sqlite3.connect(name)
-            data.to_sql(name, db_connection)
-        elif ext in {'xls', 'xlsx'}:
-            data.to_excel(name)
+        if name:
+            data = dict()
+            selected = self.group_selected()
+            labels = tuple(self.data.keys())
+            for i, k in selected.items():
+                data[labels[i]] = k
+            data = pandas.DataFrame.from_dict(data)
+            ext = name[name.rfind('.') + 1::]
+            if ext == 'csv':
+                data.to_csv(name)
+            elif ext == 'db':
+                db_connection = sqlite3.connect(name)
+                data.to_sql(name, db_connection)
+            elif ext in {'xls', 'xlsx'}:
+                data.to_excel(name)
 
     def load_table(self):
         """Загрузка таблицы"""
@@ -116,29 +117,49 @@ class Regression(Reg.Ui_MainWindow):
                                                           ' *.xlsx, '
                                                           '*.db '
                                                           '*.json)')
-        ext = name[name.rfind('.') + 1:]
-        if ext == 'csv':
-            self.data = pandas.read_csv(name)
-        elif ext == 'json':
-            self.data = pandas.read_json(name)
-        elif ext in {'xls', 'xlsx'}:
-            self.data = pandas.read_excel(name)
-        elif ext == 'db':
-            db_connection = sqlite3.connect(name)
-            self.data = pandas.read_sql_query(name, db_connection)
-        # self.main_table.setSelectionMode(
-        #     QtWidgets.QAbstractItemView.MultiSelection)
-        col_len = self.data.keys().__len__()
-        row_len = self.data.__len__()
-        self.main_table.setRowCount(row_len)
-        self.main_table.setColumnCount(col_len)
-        self.main_table.setHorizontalHeaderLabels(self.data.keys())
-        for i, row in self.data.iterrows():
-            for j in range(col_len):
-                self.main_table.setItem(
-                    i,
-                    j,
-                    QtWidgets.QTableWidgetItem(str(row[j])))
+        if name:
+            ext = name[name.rfind('.') + 1:]
+            if ext == 'csv':
+                self.data = pandas.read_csv(name)
+            elif ext == 'json':
+                self.data = pandas.read_json(name)
+            elif ext in {'xls', 'xlsx'}:
+                self.data = pandas.read_excel(name)
+            elif ext == 'db':
+                db_connection = sqlite3.connect(name)
+
+                tables = db_connection.execute(
+                    'select name from sqlite_master'
+                    ' where type = "table"').fetchall()
+                if len(tables) > 1:
+                    msg_box = QtWidgets.QMessageBox()
+                    msg_box.setText('Выберите нужную таблицу:\t\t\t')
+                    cb = QtWidgets.QComboBox(msg_box)
+                    cb.addItems(*zip(*tables))
+                    cb.move(230, 10)
+                    msg_box.setStandardButtons(QtWidgets.QMessageBox.Ok |
+                                               QtWidgets.QMessageBox.Discard)
+                    msg_box.setWindowTitle('Выберите нужную таблицу')
+                    msg_box.show()
+                    if msg_box.exec() == msg_box.Ok:
+                        name = cb.currentText()
+                    else:
+                        return
+                self.data = pandas.read_sql_query(f'SELECT * FROM "{name}"',
+                                                  db_connection)
+            # self.main_table.setSelectionMode(
+            #     QtWidgets.QAbstractItemView.MultiSelection)
+            col_len = self.data.keys().__len__()
+            row_len = self.data.__len__()
+            self.main_table.setRowCount(row_len)
+            self.main_table.setColumnCount(col_len)
+            self.main_table.setHorizontalHeaderLabels(self.data.keys())
+            for i, row in self.data.iterrows():
+                for j in range(col_len):
+                    self.main_table.setItem(
+                        i,
+                        j,
+                        QtWidgets.QTableWidgetItem(str(row[j])))
 
     def group_selected(self):
         """Группировка выделенного"""

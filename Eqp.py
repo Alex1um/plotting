@@ -70,8 +70,9 @@ class Equation(Eq.Ui_MainWindow):
                                                            'Save equations',
                                                            'unnamed.eqs',
                                                            'Equations (*.eqs)')
-            with open(name[0], 'wb') as f:
-                pickle.dump(self.eqs, f)
+            if name[0]:
+                with open(name[0], 'wb') as f:
+                    pickle.dump(self.eqs, f)
         except Exception as exp:
             self.widget.show_exeption(exp)
 
@@ -92,11 +93,12 @@ class Equation(Eq.Ui_MainWindow):
                                                            'Load equations',
                                                            '',
                                                            'Equations (*.eqs)')
-            with open(name[0], 'rb') as f:
-                self.eqs = pickle.load(f)
-            for eq in self.eqs:
-                self.Eqlist.addItem(QtWidgets.QListWidgetItem(eq))
-            self.update_roots()
+            if name[0]:
+                with open(name[0], 'rb') as f:
+                    self.eqs = pickle.load(f)
+                for eq in self.eqs:
+                    self.Eqlist.addItem(QtWidgets.QListWidgetItem(eq))
+                self.update_roots()
         except Exception as f:
             self.widget.show_exeption(f)
 
