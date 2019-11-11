@@ -104,7 +104,34 @@ class Regression(Reg.Ui_MainWindow):
                 data.to_csv(name)
             elif ext == 'db':
                 db_connection = sqlite3.connect(name)
-                data.to_sql(name, db_connection)
+                name = 'Unnamed'
+
+                tables = db_connection.execute(
+                    'select name from sqlite_master'
+                    ' where type = "table"').fetchall()
+                tables = tuple(*zip(*tables))
+                new_table = QtWidgets.QMessageBox(self.widget)
+                new_table.setStandardButtons(QtWidgets.QMessageBox.Ok |
+                                             QtWidgets.QMessageBox.Discard)
+
+                new_table_name = QtWidgets.QLineEdit(new_table)
+                new_table_name.setText(name)
+                new_table_name.move(150, 40)
+                new_table.setText(
+                    'Указанная таблица уже существует, заменить?\n\n' +
+                    '\t' * 6 if new_table_name.text() in tables else
+                    'Укажите имя таблицы\n\n' + '\t' * 6)
+                new_table_name.textChanged.connect(
+                    lambda: new_table.setText(
+                        'Указанная таблица уже существует, заменить?\n\n' +
+                        '\t' * 6 if new_table_name.text() in tables else
+                        'Укажите имя таблицы\n\n' + '\t' * 6))
+                new_table.resize(200, 100)
+                new_table.show()
+                ret = new_table.exec()
+                if ret == QtWidgets.QMessageBox.Ok:
+                    name = new_table_name.text()
+                    data.to_sql(name, db_connection)
             elif ext in {'xls', 'xlsx'}:
                 data.to_excel(name)
 
