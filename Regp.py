@@ -236,11 +236,14 @@ class Regression(Reg.Ui_MainWindow):
             self.widget.plot_widget.plot(*item, mode='scatter')
         datax = tuple(map(lambda x: x[0], self.selected))
         for i in range(len(self.templates)):
-            eq = self.prev_eqs.item(i).text()
-            f = eval('lambda x:' + eq)
-            datay = tuple(map(lambda x: f(x), datax))
-            ax = self.widget.plot_widget.plot(datax, datay, label=eq)
-            ax.legend(loc='upper left')
+            try:
+                eq = self.prev_eqs.item(i).text()
+                f = eval('lambda x:' + eq)
+                datay = tuple(map(lambda x: f(x), datax))
+                ax = self.widget.plot_widget.plot(datax, datay, label=eq)
+                ax.legend(loc='upper left')
+            except Exception:
+                pass
 
     def find_equation(self):
         """
@@ -256,7 +259,7 @@ class Regression(Reg.Ui_MainWindow):
             """
             er = 0
             for elem in self.selected:
-                er += (template(elem[0], *args) - elem[1]) ** 2
+                er += abs(template(elem[0], *args) - elem[1])
             return er
 
         self.prev_eqs.clear()
@@ -268,7 +271,7 @@ class Regression(Reg.Ui_MainWindow):
                 method='Nelder-Mead')
             self.prev_eqs.addItem(
                 QtWidgets.QListWidgetItem(
-                    template[1](*map(lambda x: round(x, 2), res['x']))))
+                    template[1](*map(lambda x: round(x, 3), res['x']))))
             # datax = tuple(map(lambda x: x[0], self.selected))
             # datay = tuple(map(lambda x: template(x, *res['x']), datax))
             # self.widget.plot_widget.plot(datax, datay)
