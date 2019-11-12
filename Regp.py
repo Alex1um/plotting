@@ -153,7 +153,7 @@ class Regression(Reg.Ui_MainWindow):
                 self.data = pandas.read_json(name)
             elif ext in {'xls', 'xlsx'}:
                 self.data = pandas.read_excel(name)
-            elif ext == 'db':
+            elif ext in {'db', 'sqlite'}:
                 db_connection = sqlite3.connect(name)
 
                 tables = db_connection.execute(
@@ -173,6 +173,8 @@ class Regression(Reg.Ui_MainWindow):
                         name = cb.currentText()
                     else:
                         return
+                else:
+                    name = tables[0][0]
                 self.data = pandas.read_sql_query(f'SELECT * FROM "{name}"',
                                                   db_connection)
             # self.main_table.setSelectionMode(
