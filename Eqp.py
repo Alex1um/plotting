@@ -106,7 +106,10 @@ class Equation(Eq.Ui_MainWindow):
 
     def rewrite_selection(self):
         """Одновременное изменение текста в списке и поле"""
-        self.Eqlist.selectedItems()[0].setText(self.Eq_edit.text())
+        try:  # TODO fix it
+            self.Eqlist.selectedItems()[0].setText(self.Eq_edit.text())
+        except Exception:
+            pass
 
     def add_eq(self):
         """Добавление элемента в список."""
@@ -155,9 +158,15 @@ class Equation(Eq.Ui_MainWindow):
             a.show()
             res = a.exec()
             if res == QtWidgets.QMessageBox.Ok:
-                self.Eqlist.item(0).setText(self.default_item)
+                try:
+                    self.Eqlist.item(0).setText(self.default_item)
+                except:
+                    return
             elif res == QtWidgets.QMessageBox.Discard:
-                self.selected_to_default()
+                try:
+                    self.selected_to_default()
+                except:
+                    pass
                 return
         elif self.selected:
             new_eq = self.Eq_edit.text()
