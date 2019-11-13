@@ -141,8 +141,8 @@ class Regression(Reg.Ui_MainWindow):
                                                           'Load table',
                                                           '',
                                                           'Table (*.csv '
-                                                          '*.xls,'
-                                                          ' *.xlsx, '
+                                                          '*.xls '
+                                                          ' *.xlsx '
                                                           '*.db '
                                                           '*.json)')
         if name:
@@ -259,10 +259,11 @@ class Regression(Reg.Ui_MainWindow):
             :param template: Шаблон уравнения
             :return: Ошибка
             """
-            er = 0
+            er = []
             for elem in self.selected:
-                er += abs(template(elem[0], *args) - elem[1])
-            return er
+                er.append(abs(template(elem[0], *args) - elem[1]))
+                print(abs(template(elem[0], *args) - elem[1]))
+            return max(er)
 
         self.prev_eqs.clear()
         for template in self.templates:
