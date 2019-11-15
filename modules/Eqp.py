@@ -4,12 +4,7 @@ from scipy.optimize import fsolve
 from math import *
 import numpy as np
 import pickle
-import math
-import re
-
-names = set(dir(math))
-names -= {i for i in names if i[:2] == '__'}
-names |= {'x'}
+from tools import *
 
 
 class Equation(Eq.Ui_MainWindow):
@@ -122,7 +117,7 @@ class Equation(Eq.Ui_MainWindow):
         try:
             new_eq = self.Eq_edit.text()
             if not self.selected and new_eq != self.default_item and\
-                    new_eq not in self.eqs and self.is_equation(new_eq):
+                    new_eq not in self.eqs and is_equation(new_eq):
                 self.eqs.append(new_eq)
                 self.Eqlist.addItem(QtWidgets.QListWidgetItem(self.eqs[-1]))
                 self.selected_to_default()
@@ -188,7 +183,7 @@ class Equation(Eq.Ui_MainWindow):
         """Нахождение печесечений"""
         self.Eqroots.clear()
         if self.eqs:
-            func = self.make_fun_stable(
+            func = make_fun_stable(
                 eval('lambda x: ((' + ') - ('.join(self.eqs) + '))'),
                 -float('inf'))
             a = fsolve(np.vectorize(func),
@@ -201,7 +196,7 @@ class Equation(Eq.Ui_MainWindow):
         """Построение общего графика функция"""
         self.widget.plot_widget.plot_clear()
         for eq in self.eqs:
-            f = np.vectorize(self.make_fun_stable(eval('lambda x: ' + eq)))
+            f = np.vectorize(make_fun_stable(eval('lambda x: ' + eq)))
             ax = self.widget.plot_widget.plot(np.arange(*self.settings),
                                               f(np.arange(*self.settings)),
                                               label=eq)
@@ -238,19 +233,3 @@ class Equation(Eq.Ui_MainWindow):
         if ans == QtWidgets.QMessageBox.Ok:
             r1v, r2v, stepv = r1.value(), r2.value(), step.value()
             self.settings = (min(r1v, r2v), max(r1v, r2v), stepv)
-
-    @staticmethod
-    def is_equation(s: str):
-        return False if set(re.findall('[a-z]+', s.lower())) - names else True
-
-    @staticmethod
-    def make_fun_stable(f, default=None):
-
-        def new_fun(*args, **kwargs):
-            nonlocal f, default
-            try:
-                return f(*args, **kwargs)
-            except Exception:
-                return default
-
-        return new_fun
