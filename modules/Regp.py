@@ -5,6 +5,7 @@ import sqlite3
 from types import FunctionType
 from scipy.optimize import minimize, OptimizeResult
 import numpy as np
+from tools import *
 
 
 class Regression(Reg.Ui_MainWindow):
@@ -12,11 +13,12 @@ class Regression(Reg.Ui_MainWindow):
     Клас регрессиии
     """
     templates = {
-        (lambda x, k, b, *args: k * x + b,
+        (make_fun_stable(lambda x, k, b, *args: k * x + b),
          lambda *args: '{}*x + {}'.format(*args)),
-        (lambda x, w0, w1, w2, *args: w0 * x ** 2 + w1 * x + w2,
+        (make_fun_stable(lambda x, w0, w1, w2, *args:
+                         w0 * x ** 2 + w1 * x + w2),
          lambda *args: '{}*x**2 + {}*x + {}'.format(*args)),
-        (lambda x, w0, w1, w2, *args: w0 / (x + w1) + w2,
+        (make_fun_stable(lambda x, w0, w1, w2, *args: w0 / (x + w1) + w2),
          lambda *args: '{} / (x + {}) + {}'.format(*args))
     }
 
