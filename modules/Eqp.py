@@ -181,16 +181,19 @@ class Equation(Eq.Ui_MainWindow):
 
     def update_roots(self):
         """Нахождение печесечений"""
-        self.Eqroots.clear()
-        if self.eqs:
-            func = make_fun_stable(
-                eval('lambda x: ((' + ') - ('.join(self.eqs) + '))'),
-                -float('inf'))
-            a = fsolve(np.vectorize(func),
-                       np.arange(*self.settings),
-                       xtol=1e-5)
-            for root in set(map(lambda x: x.round(2), a)):
-                self.Eqroots.addItem(QtWidgets.QListWidgetItem(str(root)))
+        try:
+            self.Eqroots.clear()
+            if self.eqs:
+                func = make_fun_stable(
+                    eval('lambda x: ((' + ') - ('.join(self.eqs) + '))'),
+                    -float('inf'))
+                a = fsolve(np.vectorize(func),
+                           np.arange(*self.settings),
+                           xtol=1e-5)
+                for root in set(map(lambda x: x.round(2), a)):
+                    self.Eqroots.addItem(QtWidgets.QListWidgetItem(str(root)))
+        except Exception as f:
+            self.widget.show_exeption(f)
 
     def build_plot(self):
         """Построение общего графика функция"""

@@ -237,7 +237,11 @@ class Regression(Reg.Ui_MainWindow):
         self.widget.plot_widget.plot_clear()
         # self.widget.plot_widget.plot_clear()
         for item in self.selected:
-            self.widget.plot_widget.plot(*item, mode='scatter')
+            try:
+                self.widget.plot_widget.plot(*item, mode='scatter')
+            except Exception as f:
+                self.widget.show_exeption(f)
+                break
         datax = tuple(map(lambda x: x[0], self.selected))
         for i in range(len(self.templates)):
             try:
@@ -261,10 +265,12 @@ class Regression(Reg.Ui_MainWindow):
             :param template: Шаблон уравнения
             :return: Ошибка
             """
-            er = []
-            for elem in self.selected:
-                er.append(abs(template(elem[0], *args) - elem[1]))
-            return max(er)
+            er = 0
+            try:
+                for elem in self.selected:
+                    er += abs(template(elem[0], *args) - elem[1])
+            finally:
+                return er
 
         self.prev_eqs.clear()
         for template in self.templates:
