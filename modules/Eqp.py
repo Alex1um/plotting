@@ -56,11 +56,19 @@ class Equation(Eq.Ui_MainWindow):
 
     def reset(self):
         """Отчистка полей"""
+        if self.Eq_edit.text() != self.default_item or self.Eqlist.count() or self.Eqroots.count():
+            res = self.change_dialog()
+            if res == QtWidgets.QMessageBox.Ok:
+                self.clear_all()
+        else:
+            self.clear_all()
+
+    def clear_all(self):
         self.eqs = []
+        self.Eq_edit.setText(self.default_item)
         self.Eqlist.clear()
         self.Eqroots.clear()
         self.Eqlist.addItem(QtWidgets.QListWidgetItem(self.default_item))
-        self.Eq_edit.setText(self.default_item)
         self.Eqlist.setCurrentRow(0)
         self.Eq_edit.setSelection(0, 12)
         self.selected = 0
@@ -107,7 +115,7 @@ class Equation(Eq.Ui_MainWindow):
 
     def rewrite_selection(self):
         """Одновременное изменение текста в списке и поле"""
-        try:  # TODO fix it
+        try:
             self.Eqlist.selectedItems()[0].setText(self.Eq_edit.text())
         except Exception:
             pass
@@ -150,25 +158,18 @@ class Equation(Eq.Ui_MainWindow):
         """
         if not self.selected and\
                 self.Eqlist.item(0).text() != self.default_item:
-            a = QtWidgets.QMessageBox()
-            a.setWindowTitle('Внимание!')
-            a.setText('Вы не сохранили измененное уравнение'
-                      '. Вы уверены, что хотите отбросить изменения?')
-            a.setStandardButtons(
-                QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Discard)
-            a.show()
-            res = a.exec()
+
+            res = self.change_dialog()
             if res == QtWidgets.QMessageBox.Ok:
                 try:
                     self.Eqlist.item(0).setText(self.default_item)
-                except:
-                    return
+                finally:
+                    return True
             elif res == QtWidgets.QMessageBox.Discard:
                 try:
                     self.selected_to_default()
-                except:
-                    pass
-                return
+                finally:
+                    return False
         elif self.selected:
             new_eq = self.Eq_edit.text()
             self.eqs[self.selected - 1] = new_eq
@@ -178,6 +179,17 @@ class Equation(Eq.Ui_MainWindow):
             self.update_roots()
         except Exception:
             pass
+
+    @staticmethod
+    def change_dialog():
+        a = QtWidgets.QMessageBox()
+        a.setWindowTitle('Внимание!')
+        a.setText('Вы не сохранили измененное уравнение'
+                  '. Вы уверены, что хотите отбросить изменения?')
+        a.setStandardButtons(
+            QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Discard)
+        a.show()
+        return a.exec()
 
     def update_roots(self):
         """Нахождение печесечений"""
