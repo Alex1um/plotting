@@ -179,19 +179,22 @@ class Regression(Reg.Ui_MainWindow):
                     name = tables[0][0]
                 self.data = pandas.read_sql_query(f'SELECT * FROM "{name}"',
                                                   db_connection)
-            # self.main_table.setSelectionMode(
-            #     QtWidgets.QAbstractItemView.MultiSelection)
-            col_len = self.data.keys().__len__()
-            row_len = self.data.__len__()
-            self.main_table.setRowCount(row_len)
-            self.main_table.setColumnCount(col_len)
-            self.main_table.setHorizontalHeaderLabels(self.data.keys())
-            for i, row in self.data.iterrows():
-                for j in range(col_len):
-                    self.main_table.setItem(
-                        i,
-                        j,
-                        QtWidgets.QTableWidgetItem(str(row[j])))
+            try:
+                # self.main_table.setSelectionMode(
+                #     QtWidgets.QAbstractItemView.MultiSelection)
+                col_len = self.data.keys().__len__()
+                row_len = self.data.__len__()
+                self.main_table.setRowCount(row_len)
+                self.main_table.setColumnCount(col_len)
+                self.main_table.setHorizontalHeaderLabels(self.data.keys())
+                for i, row in self.data.iterrows():
+                    for j in range(col_len):
+                        self.main_table.setItem(
+                            i,
+                            j,
+                            QtWidgets.QTableWidgetItem(str(row[j])))
+            except Exception as f:
+                self.widget.show_exeption(f)
 
     def group_selected(self):
         """Группировка выделенного"""
