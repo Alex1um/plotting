@@ -56,7 +56,7 @@ class Equation(Eq.Ui_MainWindow):
 
     def reset(self):
         """Отчистка полей"""
-        if self.Eq_edit.text() != self.default_item or self.Eqlist.count() or self.Eqroots.count():
+        if self.Eq_edit.text() != self.default_item or self.Eqlist.count() > 1 or self.Eqroots.count():
             res = self.change_dialog()
             if res == QtWidgets.QMessageBox.Ok:
                 self.clear_all()

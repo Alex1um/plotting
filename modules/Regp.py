@@ -268,12 +268,13 @@ class Regression(Reg.Ui_MainWindow):
             :param template: Шаблон уравнения
             :return: Ошибка
             """
-            er = 0
+            er = []
             try:
                 for elem in self.selected:
-                    er += abs(template(elem[0], *args) - elem[1])
+                    er.append((template(elem[0], *args) - elem[1]) ** 2)
+                er = sum(er)
             finally:
-                return er
+                return er if er else 0
 
         self.prev_eqs.clear()
         for template in self.templates:
