@@ -15,11 +15,11 @@ class Regression(Reg.Ui_MainWindow):
     templates = {
         (make_fun_stable(lambda x, k, b, *args: k * x + b),
          lambda *args: '{}*x + {}'.format(*args)),
-        (make_fun_stable(lambda x, w0, w1, w2, *args:
-                         w0 * x ** 2 + w1 * x + w2),
-         lambda *args: '{}*x**2 + {}*x + {}'.format(*args)),
-        (make_fun_stable(lambda x, w0, w1, w2, *args: w0 / (x + w1) + w2),
-         lambda *args: '{} / (x + {}) + {}'.format(*args))
+        # (make_fun_stable(lambda x, w0, w1, w2, *args:
+        #                  w0 * x ** 2 + w1 * x + w2),
+        #  lambda *args: '{}*x**2 + {}*x + {}'.format(*args)),
+        # (make_fun_stable(lambda x, w0, w1, w2, *args: w0 / (x + w1) + w2),
+        #  lambda *args: '{} / (x + {}) + {}'.format(*args))
     }
 
     def __init__(self, widget):
